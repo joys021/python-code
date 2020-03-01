@@ -52,20 +52,21 @@ def index():
 #what's the average number of fields across all the .csv files?
 @app.route('/csv_quest1')
 def csv_quest1():
-    path = 'venv/csv_assessment'
-    files = []
+    filenames = []
     num_cols=[]
-    for r, d, f in os.walk(path):
-        for file in f:
-            if '.csv' in file:
-                files.append(os.path.join(r, file)) 
-    for filename in files:
+    for subdir, dirs, files in os.walk(r'/root/data'):
+        for file in files:
+            filenames.append(os.path.join(subdir, file))
+    print(filenames)
+
+    for filename in filenames:
         df = pd.read_csv(filename, index_col=None, header=0)
         num_cols.append(len(df.columns))
     average_columns= sum(num_cols)/len(num_cols)
-    return ' %f' % average_columns
+    return '%f' % average_columns
 
-         
+   
+"""            
 #what's the total number or rows for the all the .csv files?
 @app.route('/csv_quest2')
 def csv_quest2():
@@ -100,7 +101,7 @@ def csv_quest3():
     print(num_rows)
     total_rows= sum(num_rows)
     return ' %f' % total_rows
-
+"""
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)
     host = os.environ.get("IP", "0.0.0.0")
